@@ -1,5 +1,9 @@
 import logging
 import os
+import pdb
+import re
+
+from lib.ImagesController import ImagesController
 
 from aiogram import Bot, Dispatcher, executor, types
 
@@ -8,8 +12,13 @@ logging.basicConfig(level=logging.INFO)
 
 # Initialize bot and dispatcher
 bot = Bot(token=os.environ['BOTKEY'])
+
 dp = Dispatcher(bot)
 
+ic = ImagesController( os.environ['APIKEY'] )
+
+def formatImg(url, width, height):
+    return f'<img src="{url}" width="{width}" height="{height}" >'
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
@@ -34,6 +43,21 @@ async def cats(message: types.Message):
 
         await message.reply_photo(photo, caption='Cats are here 😺')
 
+@dp.message_handler(regexp='(^image[s]?$|^pic)')
+async def images(message: types.Message):
+    s2 = message.text.split()[1:]
+    query = '+'.join(s2)
+
+    result = await ic.get_image(query)
+
+    media = types.MediaGroup()
+    for img in result[1:5]:
+        media.attach_photo(img['previewURL'])
+    await message.reply_media_group(media=media)
+
+    #result2 = list(map(lambda item: formatImg(item['previewURL'],item['previewWidth'],item['previewHeight']), result))
+
+    #await message.reply("Images: " + "".join(result2) )
 
 @dp.message_handler()
 async def echo(message: types.Message):
