@@ -43,7 +43,8 @@ async def cats(message: types.Message):
 
         await message.reply_photo(photo, caption='Cats are here 😺')
 
-@dp.message_handler(regexp='(^image[s]?$|^pic)')
+#@dp.message_handler(regexp='(^image[s]?$|^pic)')
+@dp.message_handler(commands=['image', 'picture', 'pic'])
 async def images(message: types.Message):
     s2 = message.text.split()[1:]
     query = '+'.join(s2)
@@ -53,6 +54,8 @@ async def images(message: types.Message):
     media = types.MediaGroup()
     for img in result[1:5]:
         media.attach_photo(img['previewURL'])
+    logging.info('result sended:' + ','.join(list( map(lambda x: x['previewURL'], result[1:5]) ) ) )
+
     await message.reply_media_group(media=media)
 
     #result2 = list(map(lambda item: formatImg(item['previewURL'],item['previewWidth'],item['previewHeight']), result))
