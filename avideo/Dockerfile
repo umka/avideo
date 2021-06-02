@@ -22,7 +22,6 @@ RUN pip install -U pip && pip install -r requirements.txt
 
 # Copy application files
 COPY server /opt/app/server
-COPY info /opt/app/
 
 # Allow image to use reserved ports
 RUN setcap 'cap_net_bind_service=+ep' /opt/app/server/app.py
