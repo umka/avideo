@@ -12,6 +12,18 @@ services:
     environment:
       APIKEY: "${APIKEY}"
 
+  bot:
+    build:
+      context: './avideo'
+    container_name: avideo-server
+    volumes:
+      - "server_src:/opt/app/server"
+    ports:
+      - '8081:8081'
+    environment:
+      BOTKEY: "${BOTKEY}"
+    entrypoint: python3 bot.py
+
 volumes:
   server_src:
     driver_opts:

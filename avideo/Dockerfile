@@ -1,5 +1,5 @@
 
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.6-alpine3.8
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7-alpine3.8
 
 WORKDIR /opt/app
 
