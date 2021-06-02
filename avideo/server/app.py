@@ -1,8 +1,13 @@
 import asyncio
 import aiohttp
 from aiohttp import web
-import pdb
+import json
 import os
+
+import pdb
+
+def formatImg(url, width, height):
+    return f'<img src="{url}" width="{width}" height="{height}" >'
 
 
 async def get_food_image(request):
@@ -13,10 +18,13 @@ async def get_food_image(request):
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as request:
             text = await request.text()
+            jsData = json.loads(text)
+            result = list(map(lambda item: formatImg(item['previewURL'],item['previewWidth'],item['previewHeight']), jsData['hits']))
             #pdb.set_trace()
             print(request.status)
-            print(text)
-            return web.Response(text=text)
+            print(result)
+            outputText = '<html><head><title>theResult</title></head><body>' + ''.join(result) + '</body></html>'
+            return web.Response(body=outputText, content_type='text/html' )
 
 
 if __name__ == '__main__':
