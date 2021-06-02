@@ -9,6 +9,8 @@ services:
       - "server_src:/opt/app/server"
     ports:
       - '8081:8081'
+    environment:
+      APIKEY: "${APIKEY}"
 
 volumes:
   server_src:

@@ -2,6 +2,7 @@ import asyncio
 import aiohttp
 from aiohttp import web
 import pdb
+import os
 
 
 async def get_food_image(request):
@@ -17,6 +18,7 @@ async def get_food_image(request):
 
 
 if __name__ == '__main__':
+    print(os.environ['APIKEY'])
     app = web.Application()
     app.add_routes([web.get('/{food}', get_food_image)])
     web.run_app(app, port=8081)
